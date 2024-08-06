@@ -38,9 +38,6 @@ describe('GET /user/Peter', () => {
       .expect(404);
       
       expect(response.notFound).toBe(true);
-      expect(response.body).toHaveProperty('data');
-      expect(response.body.data).toEqual( 
-          {_id: 1, username: 'Peter', isAdmin: true}
-      );
+      expect(response.body).not.toHaveProperty('data');
     });
   });
