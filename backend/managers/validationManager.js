@@ -22,6 +22,12 @@ const validateParameterUsername = [
         .notEmpty(),
 ];
 
+const validateParameterTaskId = [
+    param('taskId')
+    .exists()
+    .isInt({gt:0}),
+];
+
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -35,5 +41,6 @@ module.exports = {
     validateBodyUsername,
     validateBodyPassword,
     validateParameterUsername,
+    validateParameterTaskId,
     handleValidationErrors
 };

@@ -19,7 +19,7 @@ const validateAuthorization = (req, res, next) => {
         req.userData = decoded;
         next()
     } catch (err){
-        res.status(401).json("Unauthorized.");
+        res.status(403).json("Forbidden.");
     }
 };
 

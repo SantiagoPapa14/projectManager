@@ -1,6 +1,6 @@
 const requestManager = require('../managers/requestManager');
 const { handleError } = require('../managers/errorManager');
-const { validateBodyUsername, validateBodyPassword, validateParameterUsername, handleValidationErrors } = require('../managers/validationManager');
+const { validateBodyUsername, validateBodyPassword, validateParameterUsername, validateParameterTaskId, handleValidationErrors } = require('../managers/validationManager');
 const {validateAuthorization} = require('../managers/tokenManager')
 
 const express = require('express');
@@ -55,9 +55,11 @@ router.get('/:username',
   handleValidationErrors,
   async (req, res) => {
   try{
-    result = await requestManager.getUser(req.userData, req.params.username)
-    delete result['hashedPassword'];
-    res.status(200).json(result);
+    result = await requestManager.getUser(req.userData, req.params.username);
+    res.status(200).json({
+      message: 'Success',
+      data: result
+    });
   }catch(err){
       handleError(err);
       res.status(err.statusCode).json(err.message);
@@ -68,9 +70,6 @@ router.get('/:username',
 router.get('/', validateAuthorization, async (req, res) => {
   try{
     result = await requestManager.getAllUsers(req.userData)
-    result.forEach(user => {
-      delete user['hashedPassword'];
-    });
     res.status(200).json({
       message: 'Success',
       data: result
@@ -82,11 +81,14 @@ router.get('/', validateAuthorization, async (req, res) => {
 })
 
 //Assigns User To Task
-router.get('/:username/assign/:taskId', validateAuthorization, async (req, res) => {
+router.get('/:username/assign/:taskId',
+  validateAuthorization,
+  validateParameterUsername,
+  validateParameterTaskId,
+  handleValidationErrors,
+   async (req, res) => {
   try{
     const {taskId, username} = req.params;
-    validateNullFields([username, taskId]);
-    validateFieldTypes([username, taskId], [String, Number]);
     result = await requestManager.assignUserToTask(req.userData, username, taskId);
     res.status(200).json(result);
   }catch(err){

@@ -17,8 +17,8 @@ afterEach(() => {
   server.close();
 });
 
-describe('GET /user/', () => {
-    it('should respond with a 200 status and all users within the body when token is admin', async () => {
+describe('GET /user/Peter', () => {
+    it('by admin user should respond with a 200 status and Peters user WITH hashPass and assignedTasks', async () => {
       
       //Pretend we have an admin token
       authM.validateAuthorization.mockImplementation((req, res, next)=>{
@@ -30,24 +30,19 @@ describe('GET /user/', () => {
         next();
       })
 
-      //Pretend there's two users in the database
-      mongoDb.getAllUsers.mockReturnValue([
-        {_id: 1, username: 'James', hashedPassword: 'password', isAdmin: true,  assignedTasks: []},
-        {_id: 2, username: 'Adam',  hashedPassword: 'password', isAdmin: false, assignedTasks: []}
-      ])
-
-      //Pretend there are two users in the database
+      //Pretend there's a guy called Peter in the database
+      mongoDb.getUser.mockReturnValue(
+        {_id: 1, username: 'Peter', hashedPassword: 'password', isAdmin: true,  assignedTasks: []}
+      )
 
       const response = await request(app)
-      .get('/user/')
+      .get('/user/Peter')
       .expect(200);
       
       expect(response.ok).toBe(true);
       expect(response.body).toHaveProperty('data');
-      expect(response.body.data).toEqual(        [
-          {_id: 1, username: 'James', hashedPassword: 'password', isAdmin: true,  assignedTasks: []},
-          {_id: 2, username: 'Adam', hashedPassword: 'password',  isAdmin: false, assignedTasks: []}
-        ]
+      expect(response.body.data).toEqual( 
+          {_id: 1, username: 'Peter', hashedPassword: 'password', isAdmin: true,  assignedTasks: []}
       );
     });
   });

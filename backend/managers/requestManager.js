@@ -31,12 +31,13 @@ async function loginUser(username, password){;
 
 //#region Token required functions
 async function getUser(token, username){
-    if(!token.isAdmin){
-        throwError(403)
-    }
     const user = await mongoManager.getUser(username);
     if(user == null){
         throwError(404);
+    }
+    if(!token.isAdmin){
+        delete user['hashedPassword'];
+        delete user['assignedTasks'];
     }
     return(user);
 }
