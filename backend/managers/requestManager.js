@@ -15,7 +15,7 @@ async function createUser(username, password){
     await mongoManager.addUser(username, hashedPassword);
 }
 
-async function loginUser(username, password){
+async function loginUser(username, password){;
     const user = await mongoManager.getUser(username);
     if(user == null){
         throwError(404);

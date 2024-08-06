@@ -16,24 +16,24 @@ describe('POST /user/register', () => {
     it('should respond with a 400 status when username is missing', async () => {
       const response = await request(server)
       .post('/user/register')
-      .send({password: 'TestPassword1'});
-      expect(response.status).toBe(400);
+      .send({password: 'TestPassword1'})
+      .expect(400);
       expect(response.badRequest).toBe(true);
     });
 
   it('should respond with a 400 status when password is missing', async () => {
     const response = await request(server)
     .post('/user/register')
-    .send({username: 'TestUser1'});
-    expect(response.status).toBe(400);
+    .send({username: 'TestUser1'})
+    .expect(400);
     expect(response.badRequest).toBe(true);
   });
 
   it('should respond with a 400 status when username and password are missing', async () => {
     const response = await request(server)
     .post('/user/register')
-    .send({});
-    expect(response.status).toBe(400);
+    .send({})
+    .expect(400);
     expect(response.badRequest).toBe(true);
   });
 });

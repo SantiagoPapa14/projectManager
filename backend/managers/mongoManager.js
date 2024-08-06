@@ -1,24 +1,33 @@
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const dotenv = require('dotenv')
 dotenv.config({path:__dirname+'/../.env'})
-const uri = process.env.MONGO_URI;
+const uri = process.env.MONGO_URI
 
-let client;
-let db;
-
-async function connectToDatabase() {
-  if (!client) {
-      client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-      await client.connect();
-      db = client.db('your-database-name');
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
   }
-  return db;
+});
+
+var database;
+async function connectToDatabase() {
+  try {
+    await client.connect();
+    database = await client.db("project_manager");
+  } catch (err) {
+    await client.close();
+    throw err;
+  }
 }
 
-async function getCollection(collectionName) {
-  const db = await connectToDatabase();
-  return db.collection(collectionName);
+async function getCollection(name) {
+  if (!database) {
+    await connectToDatabase();
+  }
+  return database.collection(name);
 }
 
 //#region Utility Functions

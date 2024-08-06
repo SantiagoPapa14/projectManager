@@ -42,6 +42,7 @@ describe('GET /user/', () => {
       .get('/user/')
       .expect(200);
       
+      expect(response.ok).toBe(true);
       expect(response.body).toHaveProperty('data');
       expect(response.body.data).toEqual(        [
           {_id: 1, username: 'James', isAdmin: true,  assignedTasks: []},

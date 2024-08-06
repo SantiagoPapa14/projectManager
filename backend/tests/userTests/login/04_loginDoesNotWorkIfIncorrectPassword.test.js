@@ -14,17 +14,18 @@ afterEach(() => {
 });
 
 describe('GET /user/login', () => {
-    it('should respond with a 200 status and the token within the body when credentials are valid', async () => {
+    it('should respond with a 401 status when wrong password', async () => {
       mongoDb.getUser.mockReturnValue({
         username: 'TestUser1',
+        //This would be 'TestPassword1'
         hashedPassword: '$2a$10$AYPl5DbEjtpSH3DIiXHXkuUODN79EOVZzu85ouCQVmGyJ1s3uwEEG'
       });
       const response = await request(app)
       .get('/user/login')
-      .send({username: 'TestUser1', password: 'TestPassword1'})
-      .expect(200);
+      .send({username: 'TestUser1', password: 'WrongPassword'})
+      .expect(401);
       
-      expect(response.body.message).toBe("Login successful.");
-      expect(response.body.authorization).toBeDefined();
+      expect(response.unauthorized).toBe(true);
+      expect(response.body.authorization).not.toBeDefined();
     });
   });

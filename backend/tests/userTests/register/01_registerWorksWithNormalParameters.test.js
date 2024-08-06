@@ -18,8 +18,8 @@ describe('POST /user/register', () => {
       mongoDb.addUser.mockReturnValue({});
       const response = await request(app)
       .post('/user/register')
-      .send({username: 'TestUser1', password: 'TestPassword1'});
-      expect(response.status).toBe(201);
+      .send({username: 'TestUser1', password: 'TestPassword1'})
+      .expect(201);
       expect(response.body.message).toBe('Created.');
     });
   });
