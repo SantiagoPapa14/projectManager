@@ -28,6 +28,26 @@ const validateParameterTaskId = [
     .isInt({gt:0}),
 ];
 
+const validateBodyTitle = [
+    body('title')
+        .exists()
+        .isString()
+        .notEmpty(),
+];
+
+const validateBodyDescription = [
+    body('description')
+    .exists()
+    .isString()
+    .notEmpty(),
+];
+
+const validateBodyDeadline = [
+    body('deadline')
+        .notEmpty()
+        .isDate()
+];
+
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -42,5 +62,8 @@ module.exports = {
     validateBodyPassword,
     validateParameterUsername,
     validateParameterTaskId,
+    validateBodyTitle,
+    validateBodyDescription,
+    validateBodyDeadline,
     handleValidationErrors
 };

@@ -1,6 +1,6 @@
 const requestManager = require('../managers/requestManager');
 const { handleError } = require('../managers/errorManager');
-const { validateNullFields, validateFieldTypes, validateFieldValueType } = require('../managers/validationManager');
+const vm = require('../managers/validationManager');
 const {validateAuthorization} = require('../managers/tokenManager')
 
 const express = require('express');
@@ -8,11 +8,14 @@ const router = express.Router();
 router.use(express.json());
 
 //Create Task
-router.post('/create', validateAuthorization, async (req, res) => {
+router.post('/create',
+  validateAuthorization,
+  vm.validateBodyTitle,
+  vm.validateBodyDescription,
+  vm.validateBodyDeadline,
+   async (req, res) => {
   try{
     const {title, description, deadline} = req.body;
-    validateNullFields([title, description, deadline])
-    validateFieldTypes([title, description, deadline], [String, String, Date]);
     result = await requestManager.createTask(req.userData, title, description, deadline);
     res.status(201).json(result);
   }

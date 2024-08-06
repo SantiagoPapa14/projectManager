@@ -1,6 +1,6 @@
 const requestManager = require('../managers/requestManager');
 const { handleError } = require('../managers/errorManager');
-const { validateBodyUsername, validateBodyPassword, validateParameterUsername, validateParameterTaskId, handleValidationErrors } = require('../managers/validationManager');
+const vm = require('../managers/validationManager');
 const {validateAuthorization} = require('../managers/tokenManager')
 
 const express = require('express');
@@ -10,9 +10,9 @@ router.use(express.json());
 
 //Create User
 router.post('/register',
-  validateBodyUsername,
-  validateBodyPassword,
-  handleValidationErrors,
+  vm.validateBodyUsername,
+  vm.validateBodyPassword,
+  vm.handleValidationErrors,
   async (req, res) => {
   try{
     const {username, password} = req.body;
@@ -31,9 +31,9 @@ router.post('/register',
 
 //Login user
 router.get('/login',
-  validateBodyUsername,
-  validateBodyPassword,
-  handleValidationErrors,
+  vm.validateBodyUsername,
+  vm.validateBodyPassword,
+  vm.handleValidationErrors,
   async (req, res) => {
   try{
     const {username, password} = req.body;
@@ -51,8 +51,8 @@ router.get('/login',
 //Get user
 router.get('/:username',
   validateAuthorization,
-  validateParameterUsername,
-  handleValidationErrors,
+  vm.validateParameterUsername,
+  vm.handleValidationErrors,
   async (req, res) => {
   try{
     result = await requestManager.getUser(req.userData, req.params.username);
@@ -67,7 +67,9 @@ router.get('/:username',
 })
 
 //Get all users
-router.get('/', validateAuthorization, async (req, res) => {
+router.get('/',
+  validateAuthorization,
+  async (req, res) => {
   try{
     result = await requestManager.getAllUsers(req.userData)
     res.status(200).json({
@@ -83,9 +85,9 @@ router.get('/', validateAuthorization, async (req, res) => {
 //Assigns User To Task
 router.get('/:username/assign/:taskId',
   validateAuthorization,
-  validateParameterUsername,
-  validateParameterTaskId,
-  handleValidationErrors,
+  vm.validateParameterUsername,
+  vm.validateParameterTaskId,
+  vm.handleValidationErrors,
    async (req, res) => {
   try{
     const {taskId, username} = req.params;
