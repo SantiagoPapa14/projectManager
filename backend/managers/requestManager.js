@@ -46,10 +46,10 @@ async function getAllUsers(token){
         throwError(403)
     }
     const user = await mongoManager.getAllUsers();
-    if(user == null){
+    if(user == null || user.length == 0){
         throwError(404);
     }
-    return(user);
+    return user;
 }
 
 async function assignUserToTask(token, userToAssign, taskId){

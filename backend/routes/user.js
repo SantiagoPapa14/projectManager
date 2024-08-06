@@ -68,10 +68,13 @@ router.get('/:username',
 router.get('/', validateAuthorization, async (req, res) => {
   try{
     result = await requestManager.getAllUsers(req.userData)
-    result = result.forEach(user => {
+    result.forEach(user => {
       delete user['hashedPassword'];
     });
-    res.status(200).json(result);
+    res.status(200).json({
+      message: 'Success',
+      data: result
+    });
   }catch(err){
       handleError(err);
       res.status(err.statusCode).json(err.message);
