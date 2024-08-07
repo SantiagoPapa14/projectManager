@@ -12,11 +12,11 @@ afterEach(() => {
   server.close();
 });
 
-describe('GET /user/login', () => {
+describe('POST /user/login', () => {
     it('should respond with a 404 status when user does not exist', async () => {
       mongoDb.getUser.mockReturnValue(null);
       const response = await request(app)
-      .get('/user/login')
+      .post('/user/login')
       .send({username: 'UserThatDefinetlyDoesNotExistDonaldTrump', password: 'TestPassword1'})
       .expect(404);
       expect(response.notFound).toBe(true);

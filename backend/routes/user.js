@@ -30,7 +30,7 @@ router.post('/register',
 })
 
 //Login user
-router.get('/login',
+router.post('/login',
   vm.validateBodyUsername,
   vm.validateBodyPassword,
   vm.handleValidationErrors,
@@ -40,7 +40,7 @@ router.get('/login',
     const token = await requestManager.loginUser(username, password)
     res.status(200).json({
       message: "Login successful.",
-      authorization: "Bearer " + token
+      authorization: token
     });
   }catch(err){
       handleError(err);

@@ -14,7 +14,7 @@ afterEach(() => {
   server.close();
 });
 
-describe('GET /user/login', () => {
+describe('POST /user/login', () => {
   mongoDb.getUser.mockReturnValue({
         username: 'TestUser1',
         hashedPassword: '$2a$10$AYPl5DbEjtpSH3DIiXHXkuUODN79EOVZzu85ouCQVmGyJ1s3uwEEG'
@@ -22,7 +22,7 @@ describe('GET /user/login', () => {
 
     it('should respond with a 400 status when username is missing', async () => {
       const response = await request(server)
-      .get('/user/login')
+      .post('/user/login')
       .send({password: 'TestPassword1'})
       .expect(400);
       expect(response.badRequest).toBe(true);
@@ -30,7 +30,7 @@ describe('GET /user/login', () => {
 
   it('should respond with a 400 status when password is missing', async () => {
     const response = await request(server)
-    .get('/user/login')
+    .post('/user/login')
     .send({username: 'TestUser1'})
     .expect(400);
     expect(response.badRequest).toBe(true);
@@ -38,7 +38,7 @@ describe('GET /user/login', () => {
 
   it('should respond with a 400 status when username and password are missing', async () => {
     const response = await request(server)
-    .get('/user/login')
+    .post('/user/login')
     .send({})
     .expect(400);
     expect(response.badRequest).toBe(true);

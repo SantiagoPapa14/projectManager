@@ -13,7 +13,7 @@ afterEach(() => {
   server.close();
 });
 
-describe('GET /user/login', () => {
+describe('POST /user/login', () => {
     it('should respond with a 401 status when wrong password', async () => {
       mongoDb.getUser.mockReturnValue({
         username: 'TestUser1',
@@ -21,7 +21,7 @@ describe('GET /user/login', () => {
         hashedPassword: '$2a$10$AYPl5DbEjtpSH3DIiXHXkuUODN79EOVZzu85ouCQVmGyJ1s3uwEEG'
       });
       const response = await request(app)
-      .get('/user/login')
+      .post('/user/login')
       .send({username: 'TestUser1', password: 'WrongPassword'})
       .expect(401);
       

@@ -35,7 +35,7 @@ async function getUser(token, username){
     if(user == null){
         throwError(404);
     }
-    if(!token.isAdmin){
+    if(!token.isAdmin && token.userId != user._id){
         delete user['hashedPassword'];
         delete user['assignedTasks'];
     }
