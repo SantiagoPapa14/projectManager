@@ -80,7 +80,7 @@ async function unassignUserToTask(token, userToAssign, taskId){
 async function getTask(token, taskId){
     const hasAccess = await mongoManager.hasAccessToTask(token.userId, taskId);
     if(!hasAccess){
-        throwError(401);
+        throwError(403);
     }
     const task = await mongoManager.getTask(taskId);
     return task;
@@ -91,11 +91,6 @@ async function createTask(token, title, description, deadline){
     await mongoManager.assignToTask(token.userId, taskId);
     return taskId;
 }
-
-// async function updateTask(token, taskId){
-//     const taskId = await mongoManager.addTask(token.userId, title, description, deadline);
-//     return await mongoManager.assignToTask(token.userId, taskId);
-// }
 
 //#endregion
 module.exports = {createUser, loginUser, getUser, getAllUsers, createTask, getTask, assignUserToTask, unassignUserToTask,}

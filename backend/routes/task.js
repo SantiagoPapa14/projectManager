@@ -13,11 +13,14 @@ router.post('/create',
   vm.validateBodyTitle,
   vm.validateBodyDescription,
   vm.validateBodyDeadline,
+  vm.handleValidationErrors,
    async (req, res) => {
   try{
     const {title, description, deadline} = req.body;
     result = await requestManager.createTask(req.userData, title, description, deadline);
-    res.status(201).json(result);
+    res.status(201).json({
+      message: 'Created'
+    });
   }
   catch(err){
     handleError(err);
@@ -26,11 +29,13 @@ router.post('/create',
 })
 
 //Create Task
-router.get('/:taskId', validateAuthorization, async (req, res) => {
+router.get('/:taskId',
+  validateAuthorization,
+  vm.validateParameterTaskId,
+  vm.handleValidationErrors,
+  async (req, res) => {
   try{
     const {taskId} = req.params;
-    validateNullFields([taskId]);
-    validateFieldTypes([taskId], [Number]);
     result = await requestManager.getTask(req.userData, taskId);
     res.status(201).json(result);
   }
