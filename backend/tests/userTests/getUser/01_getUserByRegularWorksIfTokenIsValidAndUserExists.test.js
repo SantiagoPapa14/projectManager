@@ -32,7 +32,7 @@ describe('GET /user/Peter', () => {
 
       //Pretend there's a guy called Peter in the database
       mongoDb.getUser.mockReturnValue(
-        {_id: 1, username: 'Peter', hashedPassword: 'password', isAdmin: true,  assignedTasks: []}
+        {_id: 2, username: 'Peter', hashedPassword: 'password', isAdmin: true,  assignedTasks: []}
       )
 
       const response = await request(app)
@@ -42,7 +42,7 @@ describe('GET /user/Peter', () => {
       expect(response.ok).toBe(true);
       expect(response.body).toHaveProperty('data');
       expect(response.body.data).toEqual( 
-          {_id: 1, username: 'Peter', isAdmin: true}
+          {_id: 2, username: 'Peter', isAdmin: true}
       );
     });
   });

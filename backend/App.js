@@ -18,14 +18,14 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use((req,res,next) =>{
-  req.time = new Date(Date.now()).toString();
-  console.log("[*]",req.method,req.hostname, req.path, req.time);
-  console.log("\t-Params:", req.params)
-  console.log("\t-Body:", req.body )
-  console.log("\t-Auth:", req.headers.authorization)
-  next();
-});
+// app.use((req,res,next) =>{
+//   req.time = new Date(Date.now()).toString();
+//   console.log("[*]",req.method,req.hostname, req.path, req.time);
+//   console.log("\t-Params:", req.params)
+//   console.log("\t-Body:", req.body )
+//   console.log("\t-Auth:", req.headers.authorization)
+//   next();
+// });
 
 //Routes
 app.use("/task", taskRoutes);
